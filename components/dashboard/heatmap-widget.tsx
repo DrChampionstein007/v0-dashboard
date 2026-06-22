@@ -7,9 +7,14 @@ const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 interface HeatmapWidgetProps {
   stats: HeatmapStat[]
   grid: number[][]
+  clicks?: any[]
 }
 
-export function HeatmapWidget({ stats, grid }: HeatmapWidgetProps) {
+export function HeatmapWidget({
+  stats,
+  grid,
+  clicks = [],
+}: HeatmapWidgetProps) {
   return (
     <GlassCard className="p-5">
       <CardHeader
@@ -64,38 +69,20 @@ export function HeatmapWidget({ stats, grid }: HeatmapWidgetProps) {
         </div>
 
         <div
-          className="mt-3 overflow-hidden rounded-lg"
-          role="img"
-          aria-label="Heatmap of click intensity across days and hours"
-        >
-          {grid.map((row, r) => (
-            <div key={r} className="flex items-center gap-1.5 py-0.5">
-              <span className="w-8 shrink-0 text-[11px] text-muted-foreground">{DAYS[r]}</span>
-              <div className="flex flex-1 gap-1">
-                {row.map((value, c) => (
-                  <span
-                    key={c}
-                    className="h-4 flex-1 rounded-[3px] transition-transform hover:scale-110"
-                    style={{
-                      background: `color-mix(in oklch, var(--primary) ${Math.round(value * 90 + 6)}%, transparent)`,
-                    }}
-                    title={`${DAYS[r]} ${c}:00 — ${Math.round(value * 100)}% intensity`}
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
-          <div className="mt-1.5 flex items-center gap-1.5">
-            <span className="w-8 shrink-0" />
-            <div className="flex flex-1 justify-between px-0.5 text-[10px] text-muted-foreground">
-              <span>00:00</span>
-              <span>06:00</span>
-              <span>12:00</span>
-              <span>18:00</span>
-              <span>23:00</span>
-            </div>
-          </div>
-        </div>
+  className="mt-4 relative h-[350px] rounded-xl border border-border bg-muted/20 overflow-hidden"
+>
+  {clicks.map((click, index) => (
+    <div
+      key={click._id || index}
+      className="absolute h-3 w-3 rounded-full bg-primary"
+      style={{
+        left: `${Math.min((click.x / 1200) * 100, 98)}%`,
+        top: `${Math.min((click.y / 800) * 100, 98)}%`,
+      }}
+      title={`x:${click.x}, y:${click.y}`}
+    />
+  ))}
+</div>
       </div>
     </GlassCard>
   )

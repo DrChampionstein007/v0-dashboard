@@ -22,7 +22,7 @@ export default function DashboardPage() {
     const fetchDashboard = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/events/dashboard"
+          "https://analytics-backend-8jae.onrender.com/api/events/dashboard"
         )
 
         const result = await response.json()
@@ -108,7 +108,7 @@ export default function DashboardPage() {
     const fetchSessionEvents = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/events/session/${selectedSession}`
+          `https://analytics-backend-8jae.onrender.com/api/events/session/${selectedSession}`
         )
 
         const result = await response.json()
@@ -126,7 +126,7 @@ export default function DashboardPage() {
     const fetchHeatmapData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/events/heatmap?pageUrl=/"
+          "https://analytics-backend-8jae.onrender.com/api/events/heatmap?pageUrl=/"
         )
 
         const result = await response.json()
@@ -200,6 +200,7 @@ export default function DashboardPage() {
             },
           ]}
           grid={data.heatmapGrid}
+          clicks={heatmapClicks}
         />
 
         <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
