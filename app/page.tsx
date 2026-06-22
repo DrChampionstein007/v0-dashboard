@@ -17,6 +17,7 @@ export default function DashboardPage() {
   const [selectedSession, setSelectedSession] = useState("")
   const [sessionEvents, setSessionEvents] = useState<any[]>([])
   const [heatmapClicks, setHeatmapClicks] = useState<any[]>([])
+  const [selectedPage, setSelectedPage] = useState("/")
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -34,7 +35,7 @@ export default function DashboardPage() {
     }
 
     fetchDashboard()
-  }, [])
+  }, [selectedPage])
 
   const data = useMemo(() => {
     const mockData = getAnalyticsData(range)
@@ -126,7 +127,7 @@ export default function DashboardPage() {
     const fetchHeatmapData = async () => {
       try {
         const response = await fetch(
-          "https://analytics-backend-8jae.onrender.com/api/events/heatmap?pageUrl=/"
+          `https://analytics-backend-8jae.onrender.com/api/events/heatmap?pageUrl=${selectedPage}`
         )
 
         const result = await response.json()
@@ -138,7 +139,7 @@ export default function DashboardPage() {
     }
 
     fetchHeatmapData()
-  }, [])
+  }, [selectedPage])
 
   const activeSession = data.sessions.find(
     (s) => s.id === selectedSession
@@ -176,6 +177,20 @@ export default function DashboardPage() {
           <UserJourneyTimeline session={activeSession} />
         </section>
 
+
+        <div className="mb-4">
+          <select
+            value={selectedPage}
+            onChange={(e) => setSelectedPage(e.target.value)}
+            className="rounded border px-3 py-2"
+          >
+            <option value="/">/</option>
+            <option value="/dashboard">/dashboard</option>
+            <option value="/pricing">/pricing</option>
+            <option value="/contact">/contact</option>
+          </select>
+        </div>
+
         <HeatmapWidget
           stats={[
             {
@@ -190,7 +205,7 @@ export default function DashboardPage() {
             },
             {
               label: "Page",
-              value: "/",
+              value: selectedPage,
               delta: 0,
             },
             {
